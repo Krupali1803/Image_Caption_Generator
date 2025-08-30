@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Caption Generator</title>
+    <link rel="stylesheet" href="static/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Image Caption Generator</h1>
+        <div class="model-selector">
+            <label for="modelSelect">Select Model:</label>
+            <select id="modelSelect">
+                <option value="custom">Custom (ResNet50)</option>
+                <option value="transformer">Transformer (ViT+GPT2)</option>
+            </select>
+        </div>
+        <div class="uploader">
+            <label for="imageInput">Upload an image:</label>
+            <input type="file" id="imageInput" accept="image/*">
+        </div>
+        <div class="image-display">
+            <img id="uploadedImage" src="#" alt="Your uploaded image will appear here" style="display: none;">
+        </div>
+        <button id="generateCaptionButton">Generate Caption</button>
+        <div class="caption">
+            <h2>Generated Caption:</h2>
+            <p id="captionText">Your caption will appear here.</p>
+        </div>
+    </div>
+
+    <script src="static/script.js"></script>
+</body>
+</html>

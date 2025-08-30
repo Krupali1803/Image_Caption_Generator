@@ -1,0 +1,8 @@
+flask
+flask-cors
+tensorflow
+pillow
+tqdm
+torch
+transformers
+keras
