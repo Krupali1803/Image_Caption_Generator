@@ -8,8 +8,8 @@ from tensorflow.keras.models import Model
 import numpy as np
 from PIL import Image
 import io
-# import torch
-# from transformers import VisionEncoderDecoderModel, ViTImageProcessor, GPT2TokenizerFast
+import torch
+from transformers import VisionEncoderDecoderModel, ViTImageProcessor, GPT2TokenizerFast
 import pickle
 
 app = Flask(__name__)
@@ -31,10 +31,10 @@ max_length = 35
 resnet50 = ResNet50()
 resnet50 = Model(inputs=resnet50.inputs, outputs=resnet50.layers[-2].output)
 
-# # Load ViT+GPT2 model
-# vit_gpt2_model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-# vit_tokenizer = GPT2TokenizerFast.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
-# image_processor = ViTImageProcessor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+# Load ViT+GPT2 model
+vit_gpt2_model = VisionEncoderDecoderModel.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+vit_tokenizer = GPT2TokenizerFast.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
+image_processor = ViTImageProcessor.from_pretrained("nlpconnect/vit-gpt2-image-captioning")
 
 def preprocess_image_custom(image):
     # Resize image to 224x224 (standard for ResNet50)
@@ -77,11 +77,11 @@ def generate_caption_custom(model, image_features, tokenizer, max_length):
             break
     return in_text.replace('startseq', '').replace('endseq', '').strip()
 
-# def generate_caption_vit(model, image_processor, tokenizer, image):
-#     img = preprocess_image_vit(image)
-#     output = model.generate(**img)
-#     caption = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
-#     return caption
+def generate_caption_vit(model, image_processor, tokenizer, image):
+    img = preprocess_image_vit(image)
+    output = model.generate(**img)
+    caption = tokenizer.batch_decode(output, skip_special_tokens=True)[0]
+    return caption
 
 @app.route('/')
 def home():
@@ -104,9 +104,9 @@ def generate_caption_endpoint():
             image_array = preprocess_image_custom(image)
             image_features = extract_features(image_array)
             caption = generate_caption_custom(custom_model, image_features, tokenizer, max_length)
-        # elif model_choice == 'transformer':
-            # Process for ViT+GPT2 model
-            # caption = generate_caption_vit(vit_gpt2_model, image_processor, vit_tokenizer, image)
+        elif model_choice == 'transformer':
+            Process for ViT+GPT2 model
+            caption = generate_caption_vit(vit_gpt2_model, image_processor, vit_tokenizer, image)
         else:
             return jsonify({'error': 'Invalid model selection'}), 400
 
