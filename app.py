@@ -104,7 +104,7 @@ def generate_caption_endpoint():
             image_array = preprocess_image_custom(image)
             image_features = extract_features(image_array)
             caption = generate_caption_custom(custom_model, image_features, tokenizer, max_length)
-        elif model_choice == 'transformer':
+        # elif model_choice == 'transformer':
             # Process for ViT+GPT2 model
             # caption = generate_caption_vit(vit_gpt2_model, image_processor, vit_tokenizer, image)
         else:
